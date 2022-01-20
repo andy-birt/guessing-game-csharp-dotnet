@@ -6,6 +6,7 @@ namespace GuessingGame
   {
     static void Main(string[] args)
     {
+      int numberOfGuesses = 4;
       int secretNumber = 42;
       //* Initialize guess to be "null" to begin executing while
       //? The question mark indicates that the string can be nullable
@@ -14,10 +15,12 @@ namespace GuessingGame
       //* Initialize num to 0 for TryParse method 
       int num;
 
-      while(!Int32.TryParse(guess, out num))
+      while(!Int32.TryParse(guess, out num) && numberOfGuesses > 0)
       {
+        if (secretNumber == num) break;
         Console.WriteLine("Guess a secret number");
         guess = Console.ReadLine();
+        numberOfGuesses--;
       }
       
       if (secretNumber == num)
