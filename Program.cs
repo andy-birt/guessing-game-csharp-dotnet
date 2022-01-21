@@ -24,6 +24,14 @@ namespace GuessingGame
         if (num > 0)
         {
           Console.WriteLine("Previous Guess: {0}", guess);
+          if (num > secretNumber)
+          {
+            Console.WriteLine("Your guess was too high.");
+          }
+          else
+          {
+            Console.WriteLine("Your guess was too low.");
+          }
         }
 
         guess = Console.ReadLine();
