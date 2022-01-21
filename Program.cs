@@ -15,10 +15,17 @@ namespace GuessingGame
       //* Initialize num to 0 for TryParse method 
       int num;
 
-      while(!Int32.TryParse(guess, out num) && numberOfGuesses > 0)
+      while(!Int32.TryParse(guess, out num) || numberOfGuesses > 0)
       {
-        if (secretNumber == num) break;
-        Console.WriteLine("Guess a secret number");
+        Console.Clear();
+        if (secretNumber == num || numberOfGuesses == 0) break;
+        Console.WriteLine("Guess a secret number, {0} guesses remaining", numberOfGuesses);
+        
+        if (num > 0)
+        {
+          Console.WriteLine("Previous Guess: {0}", guess);
+        }
+
         guess = Console.ReadLine();
         numberOfGuesses--;
       }
