@@ -21,7 +21,15 @@ namespace GuessingGame
       {
         Console.Clear();
         if (secretNumber == num || numberOfGuesses == 0) break;
-        Console.WriteLine("Guess a secret number, {0} guesses remaining", numberOfGuesses);
+
+        if (numberOfGuesses > 1)
+        {
+          Console.WriteLine("Guess a secret number, {0} guesses remaining", numberOfGuesses);
+        }
+        else
+        {
+          Console.WriteLine("Guess a secret number, {0} guess remaining", numberOfGuesses);
+        }
         
         if (num > 0)
         {
@@ -37,7 +45,7 @@ namespace GuessingGame
         }
 
         guess = Console.ReadLine();
-        numberOfGuesses--;
+        if (difficulty != 4) numberOfGuesses--;
       }
       
       if (secretNumber == num)
@@ -56,52 +64,40 @@ namespace GuessingGame
       {
         { 1, "Easy" },
         { 2, "Medium" },
-        { 3, "Hard" }
+        { 3, "Hard" },
+        { 4, "Cheater" }
       };
-      
-      Console.Clear();
-      Console.WriteLine("Easy");
-      Console.WriteLine("Medium");
-      Console.WriteLine("Hard");
-      
-      
-      Console.SetCursorPosition(0, 0);
-      Console.CursorVisible = false;
-      Console.ForegroundColor = ConsoleColor.Black;
-      Console.BackgroundColor = ConsoleColor.White;
-      Console.WriteLine(difficultySettings[1]);
-      Console.ResetColor();
 
-      var originalpos = Console.CursorTop;
+      DisplayMenu();
+
+      Console.SetCursorPosition(0, 1);
+      Console.CursorVisible = false;
+      HighlightCurrentLine(difficultySettings, 1);
+
       var k = Console.ReadKey();
-      var i = 0;
+      var i = 1;
       while (k.Key != ConsoleKey.Enter)
       {
-        Console.Clear();
-        Console.WriteLine("Easy");
-        Console.WriteLine("Medium");
-        Console.WriteLine("Hard");
         
-        if (k.Key == ConsoleKey.UpArrow && i >= 0)
+        DisplayMenu();
+        
+        if (k.Key == ConsoleKey.UpArrow && i >= 1)
         {
-          if (i > 0) 
+          if (i > 1) 
           {
             Console.SetCursorPosition(0, i - 1);
           }
           else
           {
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(0, i);
           }
-          Console.ForegroundColor = ConsoleColor.Black;
-          Console.BackgroundColor = ConsoleColor.White;
-          Console.WriteLine(difficultySettings[Console.CursorTop + 1]);
-          Console.ResetColor();
-          if (i > 0) i--;
+          HighlightCurrentLine(difficultySettings, Console.CursorTop);
+          if (i > 1) i--;
         }
         
-        else if (k.Key == ConsoleKey.DownArrow && i <= 2)
+        else if (k.Key == ConsoleKey.DownArrow && i <= 4)
         {
-          if (i < 2) 
+          if (i < 4) 
           {
             Console.SetCursorPosition(0, i + 1);
           }
@@ -109,17 +105,14 @@ namespace GuessingGame
           {
             Console.SetCursorPosition(0, i);
           }
-          Console.ForegroundColor = ConsoleColor.Black;
-          Console.BackgroundColor = ConsoleColor.White;
-          Console.WriteLine(difficultySettings[Console.CursorTop + 1]);
-          Console.ResetColor();
-          if (i < 2) i++;
+          HighlightCurrentLine(difficultySettings, Console.CursorTop);
+          if (i < 4) i++;
         }
-        Console.SetCursorPosition(0, i);
+        
         k = Console.ReadKey();
       }
       Console.CursorVisible = true;
-      return Console.CursorTop + 1;
+      return i;
 
     }
 
@@ -139,9 +132,29 @@ namespace GuessingGame
         case 3: 
           guesses = 4;
           break;
+        case 4:
+          guesses = 1;
+          break;
       }
 
       return guesses;
+    }
+
+    static void DisplayMenu()
+    {
+      Console.Clear();
+      Console.WriteLine("Choose Your Difficulty:");
+      Console.WriteLine("Easy");
+      Console.WriteLine("Medium");
+      Console.WriteLine("Hard");
+    }
+
+    static void HighlightCurrentLine(Dictionary<int, string> settings, int key)
+    {
+      Console.ForegroundColor = ConsoleColor.Black;
+      Console.BackgroundColor = ConsoleColor.White;
+      Console.WriteLine(settings[key]);
+      Console.ResetColor();
     }
 
   }
